@@ -1,0 +1,859 @@
+/* ============================================================
+   KakaoCloud Docs Style for Confluence Wiki — v4 (Padding Fix)
+   kcwikistyle4.css
+   ------------------------------------------------------------
+   참고: docs.kakaocloud.com 실제 페이지 소스 확인 결과 Docusaurus
+   기반 정적 사이트입니다(Confluence 아님). 하지만 목표는 카카오
+   위키(Confluence)에서 동일한 "시각적" 톤앤매너를 재현하는 것이므로,
+   실제 구현 기술과 무관하게 색상/폭/타이포/코드블록 디자인을
+   최대한 동일하게 맞췄습니다.
+
+   v1(kcwikistyle.css) 대비 변경점:
+   1) 본문 폭을 1180px → 다단 레이아웃 실측 기준(사이드바 250 +
+      본문 760 + 목차 220)에 맞춰 재조정
+   2) 코드블록을 Docusaurus Prism 테마와 동일한 네이비 다크 톤 +
+      상단 언어 라벨 바 + 문법 강조색으로 전면 교체
+   3. 표 헤더/보더를 공식 문서처럼 더 옅고 얇게 조정
+   4) TOC/사이드바 선택자를 Confluence Cloud 실제 DOM에 맞게 확장
+   ------------------------------------------------------------
+   적용 경로: 스페이스 관리 > 룩앤필(Look and Feel) > 스타일시트(CSS)
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   0. 디자인 토큰
+   ------------------------------------------------------------ */
+:root {
+  --kc-text-900: #18181b;
+  --kc-text-700: #3f3f46;
+  --kc-text-500: #71717a;
+  --kc-text-400: #a1a1aa;
+  --kc-border: #e4e4e7;
+  --kc-border-soft: #f0f0f1;
+  --kc-bg-soft: #fafafa;
+  --kc-bg-code-inline: #f1f1f3;
+  --kc-accent: #4762ff;
+  --kc-accent-soft: #eef1ff;
+  --kc-accent-dark: #3450e6;
+  --kc-radius: 8px;
+  --kc-font: "Pretendard", -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", sans-serif;
+  --kc-mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas,
+    monospace;
+
+  /* 본문 읽기 폭: Docusaurus 문서 컬럼 실측 비율 (760px 본문) 기준.
+     화면이 아무리 넓어져도 본문/표는 이 폭 이상으로 늘어나지 않음 */
+  --kc-content-max: 900px;
+
+  /* 코드블록 Docusaurus Prism(nightOwl 계열) 다크 톤 */
+  --kc-code-bg: #011627;
+  --kc-code-bar: #0b2942;
+  --kc-code-text: #d6deeb;
+  --kc-code-comment: #637777;
+  --kc-code-keyword: #c792ea;
+  --kc-code-string: #ecc48d;
+  --kc-code-function: #82aaff;
+  --kc-code-number: #f78c6c;
+}
+
+/* ------------------------------------------------------------
+   1. 레이아웃 컨테이너 — 고정 읽기 폭
+   ------------------------------------------------------------ */
+#main-content,
+.wiki-content {
+  max-width: var(--kc-content-max) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  padding: 0 8px !important;
+}
+
+.ia-splitter-content,
+#content-body,
+.contextual-sidebar-content {
+  max-width: none !important;
+}
+
+@media (max-width: 1100px) {
+  #main-content,
+  .wiki-content {
+    max-width: 100% !important;
+    padding: 0 24px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  #main-content,
+  .wiki-content {
+    padding: 0 16px !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   2. 타이포그래피
+   ------------------------------------------------------------ */
+.wiki-content {
+  font-family: var(--kc-font);
+  color: var(--kc-text-700);
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: -0.006em;
+}
+
+.wiki-content h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--kc-text-900);
+  letter-spacing: -0.02em;
+  margin: 0 0 10px 0 !important;
+  line-height: 1.3;
+}
+
+/* 공식 문서는 h1 아래 설명문에 좌측 보더 없이 옅은 인용 텍스트만 사용 */
+.wiki-content h1 + p em,
+.wiki-content h1 + blockquote {
+  color: var(--kc-text-500);
+  font-size: 16px;
+  font-style: normal;
+  border-left: none !important;
+  padding-left: 0 !important;
+  margin: 0 0 28px !important;
+  background: transparent !important;
+}
+
+.wiki-content h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--kc-text-900);
+  letter-spacing: -0.01em;
+  margin: 48px 0 16px !important;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--kc-border-soft);
+  line-height: 1.4;
+}
+
+.wiki-content h2:first-of-type {
+  margin-top: 8px !important;
+}
+
+.wiki-content h3 {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--kc-text-900);
+  margin: 32px 0 10px !important;
+  line-height: 1.4;
+}
+
+.wiki-content h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kc-text-700);
+  margin: 22px 0 8px !important;
+}
+
+.wiki-content p {
+  margin: 0 0 16px !important;
+  color: var(--kc-text-700);
+}
+
+.wiki-content strong {
+  color: var(--kc-text-900);
+  font-weight: 700;
+}
+
+.wiki-content a {
+  color: var(--kc-accent);
+  font-weight: 500;
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+.wiki-content a:hover {
+  text-decoration: underline;
+  color: var(--kc-accent-dark);
+}
+
+.wiki-content ul,
+.wiki-content ol {
+  padding-left: 22px !important;
+  margin: 0 0 16px !important;
+}
+
+.wiki-content ul li,
+.wiki-content ol li {
+  margin-bottom: 6px;
+  line-height: 1.7;
+  color: var(--kc-text-700);
+}
+
+.wiki-content hr {
+  border: none;
+  border-top: 1px solid var(--kc-border-soft);
+  margin: 36px 0;
+}
+
+/* 스텝(Step 1, Step 2 ...) 형태 소제목이 많은 카카오클라우드 튜토리얼
+   문서 특성을 반영: h3 안의 굵은 "Step N." 패턴을 시각적으로 강조 */
+.wiki-content h3:has(> strong:first-child) strong:first-child {
+  color: var(--kc-accent);
+}
+
+/* ------------------------------------------------------------
+   3. 이미지
+   ------------------------------------------------------------ */
+.wiki-content img,
+.wiki-content .confluence-embedded-image {
+  border-radius: var(--kc-radius) !important;
+  border: 1px solid var(--kc-border) !important;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04) !important;
+  max-width: 100% !important;
+  height: auto !important;
+  margin: 20px 0 !important;
+}
+
+/* ------------------------------------------------------------
+   4. 코드 — 인라인 / 블록 (v4: 네이티브 UI와 충돌 제거)
+   ------------------------------------------------------------
+   v3에서 좌우 여백이 이상해 보인 원인:
+   1) Confluence Cloud 코드 매크로는 언어 라벨(SHELL 등)과 줄바꿈/
+      복사 버튼을 이미 자체 UI로 렌더링합니다. v3에서 추가한
+      data-code-lang::before 라벨과 buttonContainer absolute 배치가
+      네이티브 레이아웃 위에 겹쳐지면서 좌우 패딩이 뒤틀렸습니다.
+   2) 텍스트 영역(.prismjs)에 padding을 주면서도 overflow-x:auto의
+      스크롤바 폭을 고려하지 않아 오른쪽 여백만 좁아 보였습니다.
+   → v4는 네이티브 구조를 건드리지 않고 "색상/폰트"만 재정의하고,
+      패딩은 코드 영역 한 곳에만 좌우 동일하게 적용합니다.
+   ------------------------------------------------------------ */
+.wiki-content code {
+  background-color: var(--kc-bg-code-inline) !important;
+  color: #d6336c !important;
+  border-radius: 4px !important;
+  padding: 2px 6px !important;
+  font-size: 13.5px !important;
+  font-family: var(--kc-mono) !important;
+  border: 1px solid var(--kc-border-soft) !important;
+}
+
+/* 코드블록 패널 전체 컨테이너 — 배경/보더/라운딩만 책임 */
+.wiki-content .code.panel.conf-macro {
+  background-color: var(--kc-code-bg) !important;
+  border: 1px solid var(--kc-code-bar) !important;
+  border-radius: var(--kc-radius) !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  margin: 18px 0 !important;
+  box-shadow: none !important;
+}
+
+.wiki-content .code.panel .codeContent.panelContent {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/* 네이티브 코드블록 내부 컨테이너 — 좌우 패딩을 여기 한 곳에서만
+   동일하게 지정. 좌/우 값을 완전히 같게 두어 여백 비대칭 방지 */
+.wiki-content .code.panel [class^="codeBlockContainer_"] {
+  padding: 40px 20px 18px 20px !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+/* 네이티브 언어 라벨/버튼 바 (codeBlockContainer 상단에 자체 렌더링됨)
+   — 위치는 그대로 두고 색상만 다크 테마에 맞게 재정의 */
+.wiki-content .code.panel [class^="buttonContainer_"] {
+  background: transparent !important;
+}
+
+.wiki-content .code.panel [class^="buttonContainer_"] button {
+  background: transparent !important;
+  color: #64748b !important;
+  border: none !important;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.wiki-content .code.panel [class^="buttonContainer_"] button:hover {
+  opacity: 1;
+  color: #cbd5e1 !important;
+}
+
+/* 실제 코드 텍스트 — 좌우 패딩은 부모(codeBlockContainer)에서만
+   책임지므로 여기서는 0으로 두어 이중 패딩(비대칭 여백) 방지 */
+.wiki-content .code.panel .prismjs,
+.wiki-content .code.panel code[class^="language-"] {
+  display: block !important;
+  background: transparent !important;
+  color: var(--kc-code-text) !important;
+  font-family: var(--kc-mono) !important;
+  font-size: 13.5px !important;
+  line-height: 1.75 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
+  tab-size: 2;
+  white-space: pre !important;
+  /* 스크롤바 자체 폭만큼 오른쪁 패딩이 줄어드는 착시 방지 */
+  scrollbar-width: thin;
+}
+
+.wiki-content .code.panel .prismjs::-webkit-scrollbar,
+.wiki-content .code.panel code[class^="language-"]::-webkit-scrollbar {
+  height: 6px;
+}
+
+.wiki-content .code.panel .prismjs::-webkit-scrollbar-thumb,
+.wiki-content .code.panel code[class^="language-"]::-webkit-scrollbar-thumb {
+  background-color: #334155;
+  border-radius: 3px;
+}
+
+/* 언어 라벨(SHELL 등)이 네이티브로 렌더링되지 않는 구버전 매크로 대비
+   폴백만 유지 — 이미 라벨이 보이는 환경에서는 중복 렌더링되지 않도록
+   :empty 조건에서만 노출 */
+.wiki-content .code.panel [data-code-lang]:empty::before {
+  content: attr(data-code-lang);
+  display: block;
+  font-size: 11px;
+  font-family: var(--kc-mono) !important;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* Prism.js 표준 토큰 클래스 — Docusaurus(nightOwl 유사) 팔레트 */
+.wiki-content .token.keyword { color: var(--kc-code-keyword) !important; font-weight: 500; }
+.wiki-content .token.string { color: var(--kc-code-string) !important; }
+.wiki-content .token.comment { color: var(--kc-code-comment) !important; font-style: italic; }
+.wiki-content .token.function { color: var(--kc-code-function) !important; }
+.wiki-content .token.number { color: var(--kc-code-number) !important; }
+.wiki-content .token.variable { color: #addb67 !important; }
+.wiki-content .token.punctuation { color: #7fdbca !important; }
+.wiki-content .token.operator { color: #7fdbca !important; }
+.wiki-content .token.class-name,
+.wiki-content .token.tag { color: #ffcb8b !important; }
+.wiki-content .token.property,
+.wiki-content .token.attr-name { color: #82aaff !important; }
+.wiki-content .token.boolean { color: #ff5874 !important; }
+.wiki-content .token.builtin { color: #ffcb8b !important; }
+
+/* 구형 코드 매크로(코드 헤더가 별도 요소로 렌더링되는 경우) 대비 */
+.wiki-content .codeHeader {
+  background-color: var(--kc-code-bar) !important;
+  border: 1px solid var(--kc-code-bar) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-radius: var(--kc-radius) var(--kc-radius) 0 0 !important;
+  color: #8fb4d9 !important;
+  font-size: 12px !important;
+  font-family: var(--kc-mono) !important;
+  padding: 8px 16px !important;
+  letter-spacing: 0.02em;
+}
+
+.wiki-content .codeHeader + .code.panel {
+  border-radius: 0 0 var(--kc-radius) var(--kc-radius) !important;
+  margin-top: 0 !important;
+  border-top: none !important;
+}
+
+/* ------------------------------------------------------------
+   5. 표 (Table) — 공식 문서 대비 더 옅고 얇은 보더로 조정
+   ------------------------------------------------------------ */
+.wiki-content .table-wrap {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  margin: 22px 0 !important;
+  box-sizing: border-box !important;
+}
+
+.wiki-content table,
+.wiki-content table.confluenceTable,
+.wiki-content .tablesorter,
+.wiki-content .contentTable,
+.wiki-content .pageProperties,
+.wiki-content .jira-table,
+.wiki-content .aui table,
+.wiki-content .ac-macro table {
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: auto !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius) !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  box-sizing: border-box !important;
+  font-size: 14px !important;
+}
+
+.wiki-content table colgroup col,
+.wiki-content table col[style] {
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+.wiki-content th.confluenceTh,
+.wiki-content table th,
+.wiki-content .jira-table th,
+.wiki-content .aui table th {
+  background-color: var(--kc-bg-soft) !important;
+  color: var(--kc-text-900) !important;
+  font-weight: 600 !important;
+  font-size: 13.5px !important;
+  padding: 11px 14px !important;
+  text-align: left !important;
+  vertical-align: middle !important;
+  border-bottom: 1px solid var(--kc-border) !important;
+  border-right: 1px solid var(--kc-border-soft) !important;
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+}
+
+.wiki-content td.confluenceTd,
+.wiki-content table td,
+.wiki-content .jira-table td,
+.wiki-content .aui table td {
+  padding: 11px 14px !important;
+  font-size: 14px !important;
+  color: var(--kc-text-700) !important;
+  line-height: 1.65 !important;
+  text-align: left !important;
+  vertical-align: top !important;
+  background-color: #ffffff !important;
+  border-bottom: 1px solid var(--kc-border-soft) !important;
+  border-right: 1px solid var(--kc-border-soft) !important;
+  word-break: keep-all !important;
+  overflow-wrap: break-word !important;
+}
+
+.wiki-content table th:last-child,
+.wiki-content table td:last-child {
+  border-right: none !important;
+}
+
+.wiki-content table tr:last-child td {
+  border-bottom: none !important;
+}
+
+.wiki-content table tr:first-child th:first-child,
+.wiki-content table tr:first-child td:first-child {
+  border-top-left-radius: var(--kc-radius) !important;
+}
+.wiki-content table tr:first-child th:last-child,
+.wiki-content table tr:first-child td:last-child {
+  border-top-right-radius: var(--kc-radius) !important;
+}
+.wiki-content table tr:last-child td:first-child {
+  border-bottom-left-radius: var(--kc-radius) !important;
+}
+.wiki-content table tr:last-child td:last-child {
+  border-bottom-right-radius: var(--kc-radius) !important;
+}
+
+.wiki-content table tr:hover td {
+  background-color: var(--kc-bg-soft) !important;
+  transition: background-color 0.15s ease;
+}
+
+/* 카카오클라우드 튜토리얼 문서 특유의 "구성값 표" 첫 컬럼(구분/항목)
+   강조 처리 — 스크린샷의 VPC 정보/가용 영역 표 스타일 */
+.wiki-content table tr td:first-child,
+.wiki-content .pageProperties td:first-child {
+  background-color: var(--kc-bg-soft) !important;
+  font-weight: 600 !important;
+  color: var(--kc-text-900) !important;
+}
+
+@media (max-width: 640px) {
+  .wiki-content .table-wrap {
+    overflow-x: auto !important;
+  }
+  .wiki-content table {
+    min-width: 560px;
+  }
+}
+
+/* ------------------------------------------------------------
+   6. 안내(Info/Note/Warning/Tip) 매크로
+   ------------------------------------------------------------
+   공식 문서의 "기본 정보" 박스는 옅은 회색/파란 배경 + 보더 없는
+   라운드 박스이며 좌측 색상 바가 없습니다. v1의 좌측 색상 바
+   스타일을 유지하되 기본(info) 타입만 공식 문서와 동일하게
+   보더 없는 옅은 배경으로 조정.
+   ------------------------------------------------------------ */
+.wiki-content blockquote {
+  border-left: 3px solid var(--kc-border);
+  background-color: transparent;
+  color: var(--kc-text-500);
+  padding: 4px 0 4px 16px;
+  margin: 20px 0;
+  border-radius: 0;
+  font-size: 15px;
+}
+
+.wiki-content .confluence-information-macro {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  border-radius: var(--kc-radius) !important;
+  border: 1px solid transparent !important;
+  padding: 14px 18px !important;
+  margin: 20px 0 !important;
+}
+
+.wiki-content .confluence-information-macro-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.wiki-content .confluence-information-macro-body {
+  flex: 1;
+  min-width: 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.wiki-content .confluence-information-macro-information {
+  background-color: var(--kc-bg-soft) !important;
+  border-color: var(--kc-border) !important;
+}
+.wiki-content .confluence-information-macro-note {
+  background-color: #fffaf0 !important;
+  border-color: #fde68a !important;
+}
+.wiki-content .confluence-information-macro-warning {
+  background-color: #fef2f2 !important;
+  border-color: #fecaca !important;
+}
+.wiki-content .confluence-information-macro-tip {
+  background-color: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+}
+
+/* ------------------------------------------------------------
+   7. 목차(TOC) — 우측 고정 레일
+   ------------------------------------------------------------ */
+.wiki-content .toc-macro {
+  position: sticky !important;
+  top: 80px !important;
+  max-height: calc(100vh - 110px) !important;
+  overflow-y: auto !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-left: 1px solid var(--kc-border-soft) !important;
+  box-shadow: none !important;
+  padding: 2px 0 2px 18px !important;
+  margin: 0 0 24px 24px !important;
+  float: right !important;
+  width: 210px !important;
+}
+
+.wiki-content .toc-macro ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+.wiki-content .toc-macro ul ul {
+  padding-left: 14px !important;
+}
+
+.wiki-content .toc-macro li {
+  margin-bottom: 7px !important;
+}
+
+.wiki-content .toc-macro a {
+  display: block !important;
+  color: var(--kc-text-500) !important;
+  font-size: 12.5px !important;
+  line-height: 1.5 !important;
+  text-decoration: none !important;
+  word-break: keep-all !important;
+  transition: color 0.15s ease !important;
+}
+
+.wiki-content .toc-macro a:hover {
+  color: var(--kc-accent) !important;
+  font-weight: 600 !important;
+}
+
+/* Confluence Cloud가 TOC를 본문이 아닌 별도 레이아웃 컬럼에 렌더링
+   하는 경우의 폴백 */
+.contextual-sidebar .toc-macro,
+.ia-splitter-content ~ * .toc-macro {
+  float: none !important;
+  width: auto !important;
+  position: static !important;
+  max-height: none !important;
+  border-left: none !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 1100px) {
+  .wiki-content .toc-macro {
+    position: static !important;
+    float: none !important;
+    width: 100% !important;
+    max-height: none !important;
+    border-left: none !important;
+    border: 1px solid var(--kc-border) !important;
+    border-radius: var(--kc-radius) !important;
+    padding: 16px 20px !important;
+    margin: 0 0 32px 0 !important;
+  }
+}
+
+/* ------------------------------------------------------------
+   8. 펼치기(Expand) 매크로
+   ------------------------------------------------------------ */
+.wiki-content .expand-container {
+  border: 1px solid var(--kc-border) !important;
+  border-radius: var(--kc-radius) !important;
+  margin: 16px 0 !important;
+  overflow: hidden;
+}
+
+.wiki-content .expand-control {
+  background-color: var(--kc-bg-soft) !important;
+  padding: 12px 16px !important;
+  margin: 0 !important;
+  border: none !important;
+  transition: background-color 0.15s ease;
+}
+
+.wiki-content .expand-control:hover {
+  background-color: var(--kc-bg-code-inline) !important;
+}
+
+.wiki-content .expand-control-text {
+  color: var(--kc-text-900) !important;
+  font-weight: 600 !important;
+  font-size: 14.5px !important;
+}
+
+.wiki-content .expand-content {
+  padding: 16px 20px !important;
+  background-color: #ffffff !important;
+  border-top: 1px solid var(--kc-border) !important;
+  margin: 0 !important;
+}
+
+/* ------------------------------------------------------------
+   9. 좌측 사이드바 (페이지 트리 / 스페이스 네비게이션)
+   ------------------------------------------------------------ */
+.ia-fixed-sidebar,
+.acs-side-navigation,
+.plugin-sidebar,
+#content-navigation {
+  background-color: #ffffff !important;
+  border-right: 1px solid var(--kc-border-soft) !important;
+  min-width: 240px;
+}
+
+ul.plugin_pagetree_children_list {
+  padding-left: 14px !important;
+}
+
+.plugin_pagetree_children_span a,
+.acs-side-navigation a,
+#content-navigation a {
+  display: block !important;
+  color: var(--kc-text-700) !important;
+  font-size: 13.5px !important;
+  text-decoration: none !important;
+  padding: 6px 10px !important;
+  border-radius: 6px !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+.plugin_pagetree_children_span a:hover,
+.acs-side-navigation a:hover,
+#content-navigation a:hover {
+  background-color: var(--kc-bg-soft) !important;
+  color: var(--kc-text-900) !important;
+}
+
+.plugin_pagetree_children_span a.selected,
+.acs-side-navigation .current > a {
+  background-color: var(--kc-accent-soft) !important;
+  color: var(--kc-accent-dark) !important;
+  font-weight: 700 !important;
+}
+
+.plugin_pagetree_children_span .icon {
+  opacity: 0.55 !important;
+}
+
+/* ------------------------------------------------------------
+   10. 에디터(편집 화면) 겹침/충돌 방지
+   ------------------------------------------------------------ */
+.ak-renderer-document.wiki-content,
+.ak-editor-content-area .wiki-content,
+#editor-content .wiki-content,
+.wiki-content.ak-renderer-document,
+#tinymce.wiki-content,
+.cke_editable.wiki-content,
+#wysiwygTextarea_ifr .wiki-content {
+  max-width: 100% !important;
+  padding: 0 !important;
+  line-height: 1.6 !important;
+}
+
+body.edit #content-title-div,
+body.create #content-title-div {
+  margin-bottom: 36px !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+/* ============================================================
+   다크모드 오버라이드
+   ============================================================ */
+html[data-color-mode="dark"] .wiki-content,
+body.aui-theme-dark .wiki-content {
+  color: #cbd5e1;
+}
+
+html[data-color-mode="dark"] .wiki-content h1,
+html[data-color-mode="dark"] .wiki-content h2,
+html[data-color-mode="dark"] .wiki-content h3,
+html[data-color-mode="dark"] .wiki-content h4,
+body.aui-theme-dark .wiki-content h1,
+body.aui-theme-dark .wiki-content h2,
+body.aui-theme-dark .wiki-content h3,
+body.aui-theme-dark .wiki-content h4 {
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content p,
+html[data-color-mode="dark"] .wiki-content ul li,
+html[data-color-mode="dark"] .wiki-content ol li,
+body.aui-theme-dark .wiki-content p,
+body.aui-theme-dark .wiki-content ul li,
+body.aui-theme-dark .wiki-content ol li {
+  color: #94a3b8 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content a,
+body.aui-theme-dark .wiki-content a {
+  color: #60a5fa !important;
+}
+
+html[data-color-mode="dark"] .wiki-content img,
+body.aui-theme-dark .wiki-content img {
+  border-color: #334155 !important;
+  opacity: 0.92;
+}
+
+html[data-color-mode="dark"] .wiki-content code,
+body.aui-theme-dark .wiki-content code {
+  background-color: #1e293b !important;
+  color: #f43f5e !important;
+  border-color: #334155 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content pre,
+body.aui-theme-dark .wiki-content pre {
+  background-color: #011627 !important;
+  border-color: #0b2942 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content table,
+body.aui-theme-dark .wiki-content table {
+  border-color: #334155 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content table th,
+body.aui-theme-dark .wiki-content table th {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content table td,
+body.aui-theme-dark .wiki-content table td {
+  background-color: #0f172a !important;
+  color: #cbd5e1 !important;
+  border-color: #334155 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content table tr:hover td,
+body.aui-theme-dark .wiki-content table tr:hover td {
+  background-color: #1e293b !important;
+}
+
+html[data-color-mode="dark"] .wiki-content .confluence-information-macro-information,
+body.aui-theme-dark .wiki-content .confluence-information-macro-information {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+html[data-color-mode="dark"] .wiki-content .confluence-information-macro-note,
+body.aui-theme-dark .wiki-content .confluence-information-macro-note {
+  background-color: #713f12 !important;
+  color: #fef9c3 !important;
+}
+html[data-color-mode="dark"] .wiki-content .confluence-information-macro-warning,
+body.aui-theme-dark .wiki-content .confluence-information-macro-warning {
+  background-color: #7f1d1d !important;
+  color: #fee2e2 !important;
+}
+html[data-color-mode="dark"] .wiki-content .confluence-information-macro-tip,
+body.aui-theme-dark .wiki-content .confluence-information-macro-tip {
+  background-color: #14532d !important;
+  color: #dcfce7 !important;
+}
+
+html[data-color-mode="dark"] .wiki-content .toc-macro,
+body.aui-theme-dark .wiki-content .toc-macro {
+  border-left-color: #334155 !important;
+}
+html[data-color-mode="dark"] .wiki-content .toc-macro a,
+body.aui-theme-dark .wiki-content .toc-macro a {
+  color: #94a3b8 !important;
+}
+html[data-color-mode="dark"] .wiki-content .toc-macro a:hover,
+body.aui-theme-dark .wiki-content .toc-macro a:hover {
+  color: #60a5fa !important;
+}
+
+html[data-color-mode="dark"] .wiki-content .expand-container,
+body.aui-theme-dark .wiki-content .expand-container {
+  border-color: #334155 !important;
+}
+html[data-color-mode="dark"] .wiki-content .expand-control,
+body.aui-theme-dark .wiki-content .expand-control {
+  background-color: #1e293b !important;
+}
+html[data-color-mode="dark"] .wiki-content .expand-control-text,
+body.aui-theme-dark .wiki-content .expand-control-text {
+  color: #f8fafc !important;
+}
+html[data-color-mode="dark"] .wiki-content .expand-content,
+body.aui-theme-dark .wiki-content .expand-content {
+  background-color: #0f172a !important;
+  border-top-color: #334155 !important;
+}
+
+html[data-color-mode="dark"] .ia-fixed-sidebar,
+html[data-color-mode="dark"] .plugin-sidebar,
+body.aui-theme-dark .ia-fixed-sidebar,
+body.aui-theme-dark .plugin-sidebar {
+  background-color: #0b1220 !important;
+  border-right-color: #334155 !important;
+}
+html[data-color-mode="dark"] .plugin_pagetree_children_span a,
+body.aui-theme-dark .plugin_pagetree_children_span a {
+  color: #cbd5e1 !important;
+}
+html[data-color-mode="dark"] .plugin_pagetree_children_span a:hover,
+body.aui-theme-dark .plugin_pagetree_children_span a:hover {
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+}
+html[data-color-mode="dark"] .plugin_pagetree_children_span a.selected,
+body.aui-theme-dark .plugin_pagetree_children_span a.selected {
+  background-color: #1e3a8a !important;
+  color: #93c5fd !important;
+}
