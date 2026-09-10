@@ -1,0 +1,1637 @@
+/* =====================================================================
+   KakaoCloud Tutorial Style for Confluence Wiki — FINAL
+   목적
+   - Confluence Wiki 작성글을 KakaoCloud Tutorial 문서 톤으로 통일
+   - 기본 Markdown/Confluence Macro만으로 자연스럽게 작동
+   - 제목, 본문, 목록, 표, 코드, 이미지, 첨부, 안내 매크로, TOC, 다크모드 지원
+
+   적용
+   - 기존 커스텀 CSS 전체 삭제 후 이 파일 전체 붙여넣기
+   - 별도 HTML 클래스 없이 기본 Wiki 요소 중심으로 동작
+   ===================================================================== */
+
+
+/* =====================================================================
+   01. DESIGN TOKENS
+   ===================================================================== */
+:root {
+  /* -------------------------------------------------------------------
+     Typography
+     ------------------------------------------------------------------- */
+  --kc-font:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
+
+  --kc-mono:
+    "SFMono-Regular",
+    Consolas,
+    "Liberation Mono",
+    Menlo,
+    Monaco,
+    monospace;
+
+  /* -------------------------------------------------------------------
+     Font size
+     ------------------------------------------------------------------- */
+  --kc-font-xs: 12px;
+  --kc-font-sm: 14px;
+  --kc-font-md: 16px;
+  --kc-font-lg: 18px;
+  --kc-font-xl: 20px;
+  --kc-font-2xl: 24px;
+  --kc-font-3xl: 30px;
+  --kc-font-4xl: 32px;
+
+  /* -------------------------------------------------------------------
+     Font weight
+     ------------------------------------------------------------------- */
+  --kc-weight-regular: 400;
+  --kc-weight-medium: 500;
+  --kc-weight-semibold: 600;
+  --kc-weight-bold: 700;
+
+  /* -------------------------------------------------------------------
+     Line height
+     ------------------------------------------------------------------- */
+  --kc-line-tight: 1.35;
+  --kc-line-heading: 1.45;
+  --kc-line-body: 1.7;
+  --kc-line-code: 1.65;
+
+  /* -------------------------------------------------------------------
+     Text colors
+     KakaoCloud tutorial reference:
+     - heading / emphasis: dark
+     - body: #424242 range
+     - secondary: #727272 range
+     ------------------------------------------------------------------- */
+  --kc-text-strong: #111111;
+  --kc-text-heading: #242424;
+  --kc-text-default: #424242;
+  --kc-text-subtle: #727272;
+  --kc-text-placeholder: #a3a3a3;
+  --kc-text-disabled: #bcbcbc;
+  --kc-text-inverse: #ffffff;
+
+  /* -------------------------------------------------------------------
+     Brand colors
+     ------------------------------------------------------------------- */
+  --kc-blue-900: #1b64da;
+  --kc-blue-800: #2468d8;
+  --kc-blue-700: #3182f6;
+  --kc-blue-600: #4b96f7;
+  --kc-blue-100: #eaf3ff;
+  --kc-blue-50: #f5f9ff;
+
+  --kc-link-default: #3182f6;
+  --kc-link-hover: #1b64da;
+  --kc-link-visited: #3182f6;
+
+  /* -------------------------------------------------------------------
+     Surface colors
+     ------------------------------------------------------------------- */
+  --kc-surface-base: #ffffff;
+  --kc-surface-subtle: #fafafa;
+  --kc-surface-muted: #f7f8fa;
+  --kc-surface-code: #f6f8fa;
+  --kc-surface-code-header: #eef1f4;
+
+  /* -------------------------------------------------------------------
+     Border colors
+     ------------------------------------------------------------------- */
+  --kc-border-subtle: #f0f0f0;
+  --kc-border-default: #e7e7e7;
+  --kc-border-strong: #d9d9d9;
+  --kc-border-code: #e2e5e9;
+
+  /* -------------------------------------------------------------------
+     Semantic colors
+     ------------------------------------------------------------------- */
+  --kc-info-bg: #eff9ff;
+  --kc-info-border: #9edfff;
+  --kc-info-accent: #43b8e8;
+  --kc-info-text: #155f82;
+
+  --kc-success-bg: #f0fbf4;
+  --kc-success-border: #9ce1b1;
+  --kc-success-accent: #43b96b;
+  --kc-success-text: #176b3a;
+
+  --kc-warning-bg: #fffaeb;
+  --kc-warning-border: #f6d365;
+  --kc-warning-accent: #f2ad16;
+  --kc-warning-text: #815900;
+
+  --kc-danger-bg: #fff3f3;
+  --kc-danger-border: #ffb8b8;
+  --kc-danger-accent: #f05252;
+  --kc-danger-text: #a63030;
+
+  /* -------------------------------------------------------------------
+     Radius
+     - 4px: inline code / compact tag
+     - 8px: image / code / alert / table
+     - 12px: compact grouped UI
+     - 16px: card / hero / tutorial visual unit
+     ------------------------------------------------------------------- */
+  --kc-radius-xs: 4px;
+  --kc-radius-sm: 8px;
+  --kc-radius-md: 12px;
+  --kc-radius-lg: 16px;
+
+  /* -------------------------------------------------------------------
+     Shadows
+     ------------------------------------------------------------------- */
+  --kc-shadow-none: none;
+  --kc-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --kc-shadow-card-hover: 0 6px 18px rgba(0, 0, 0, 0.09);
+  --kc-shadow-image: 0 2px 6px rgba(0, 0, 0, 0.06);
+
+  /* -------------------------------------------------------------------
+     Layout
+     ------------------------------------------------------------------- */
+  --kc-header-h: 56px;
+  --kc-content-gap-xs: 8px;
+  --kc-content-gap-sm: 12px;
+  --kc-content-gap-md: 16px;
+  --kc-content-gap-lg: 24px;
+  --kc-content-gap-xl: 32px;
+  --kc-content-gap-2xl: 48px;
+  --kc-content-gap-3xl: 64px;
+}
+
+
+/* =====================================================================
+   02. BASE / RESET
+   ===================================================================== */
+body.page.viewcontent .wiki-content,
+#content .wiki-content {
+  color: var(--kc-text-default);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-md);
+  font-weight: var(--kc-weight-regular);
+  line-height: var(--kc-line-body);
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.page.viewcontent .wiki-content *,
+#content .wiki-content * {
+  box-sizing: border-box;
+}
+
+body.page.viewcontent .wiki-content ::selection,
+#content .wiki-content ::selection {
+  background: #dbeafe;
+  color: var(--kc-text-strong);
+}
+
+
+/* =====================================================================
+   03. CONFLUENCE HEADER / TITLE
+   ===================================================================== */
+#breadcrumb-section {
+  display: block;
+  position: static;
+  background: transparent;
+}
+
+#title-text {
+  color: var(--kc-text-strong);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-3xl);
+  font-weight: var(--kc-weight-bold);
+  letter-spacing: -0.03em;
+  line-height: var(--kc-line-tight);
+}
+
+.pagination-actions,
+#action-menu,
+#action-menu-link,
+[id*="Link"]:has(#editPageLink),
+#title-heading ~ * #editPageLink,
+body #editPageLink {
+  position: relative;
+  z-index: 500;
+}
+
+
+/* =====================================================================
+   04. HEADING SYSTEM
+   ===================================================================== */
+body.page.viewcontent .wiki-content h1,
+body.page.viewcontent .wiki-content h2,
+body.page.viewcontent .wiki-content h3,
+body.page.viewcontent .wiki-content h4,
+body.page.viewcontent .wiki-content h5,
+body.page.viewcontent .wiki-content h6,
+#content .wiki-content h1,
+#content .wiki-content h2,
+#content .wiki-content h3,
+#content .wiki-content h4,
+#content .wiki-content h5,
+#content .wiki-content h6 {
+  color: var(--kc-text-strong);
+  font-family: var(--kc-font);
+  letter-spacing: -0.025em;
+  scroll-margin-top: calc(var(--kc-header-h) + 20px);
+}
+
+/* h1: 본문 페이지 제목 */
+body.page.viewcontent .wiki-content h1,
+#content .wiki-content h1 {
+  margin: 0 0 var(--kc-content-gap-lg);
+  padding: 0;
+  border: 0;
+  font-size: var(--kc-font-4xl);
+  font-weight: var(--kc-weight-bold);
+  line-height: var(--kc-line-tight);
+}
+
+/* h2: 시나리오 소개 / 시작하기 전에 / 작업 방식 선택 */
+body.page.viewcontent .wiki-content h2,
+#content .wiki-content h2 {
+  margin-top: var(--kc-content-gap-3xl);
+  margin-bottom: var(--kc-content-gap-lg);
+  padding: 0;
+  border: 0;
+  font-size: 26px;
+  font-weight: var(--kc-weight-bold);
+  line-height: 1.4;
+}
+
+/* h3: STEP 1, STEP 2, STEP 3 */
+body.page.viewcontent .wiki-content h3,
+#content .wiki-content h3 {
+  margin-top: 44px;
+  margin-bottom: var(--kc-content-gap-md);
+  padding: 0;
+  border: 0;
+  color: var(--kc-text-heading);
+  font-size: var(--kc-font-xl);
+  font-weight: var(--kc-weight-bold);
+  line-height: var(--kc-line-heading);
+}
+
+/* h4: 콘솔에서 작업 / 인스턴스 터미널에서 작업 */
+body.page.viewcontent .wiki-content h4,
+#content .wiki-content h4 {
+  margin-top: var(--kc-content-gap-xl);
+  margin-bottom: var(--kc-content-gap-sm);
+  padding: 0;
+  border: 0;
+  color: #303030;
+  font-size: var(--kc-font-md);
+  font-weight: var(--kc-weight-bold);
+  line-height: 1.55;
+}
+
+/* h5 / h6: 세부 확인 항목 */
+body.page.viewcontent .wiki-content h5,
+#content .wiki-content h5 {
+  margin-top: var(--kc-content-gap-lg);
+  margin-bottom: var(--kc-content-gap-xs);
+  color: var(--kc-text-default);
+  font-size: var(--kc-font-sm);
+  font-weight: var(--kc-weight-bold);
+  line-height: 1.55;
+}
+
+body.page.viewcontent .wiki-content h6,
+#content .wiki-content h6 {
+  margin-top: var(--kc-content-gap-md);
+  margin-bottom: var(--kc-content-gap-xs);
+  color: var(--kc-text-subtle);
+  font-size: var(--kc-font-xs);
+  font-weight: var(--kc-weight-semibold);
+  line-height: 1.5;
+}
+
+
+/* =====================================================================
+   05. BODY TEXT / LINK / EMPHASIS
+   ===================================================================== */
+body.page.viewcontent .wiki-content p,
+#content .wiki-content p {
+  margin-top: 0;
+  margin-bottom: var(--kc-content-gap-md);
+  color: var(--kc-text-default);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-md);
+  font-weight: var(--kc-weight-regular);
+  line-height: var(--kc-line-body);
+}
+
+body.page.viewcontent .wiki-content strong,
+body.page.viewcontent .wiki-content b,
+#content .wiki-content strong,
+#content .wiki-content b {
+  color: var(--kc-text-strong);
+  font-weight: var(--kc-weight-bold);
+}
+
+body.page.viewcontent .wiki-content em,
+body.page.viewcontent .wiki-content i,
+#content .wiki-content em,
+#content .wiki-content i {
+  color: inherit;
+  font-style: normal;
+}
+
+body.page.viewcontent .wiki-content del,
+body.page.viewcontent .wiki-content s,
+#content .wiki-content del,
+#content .wiki-content s {
+  color: var(--kc-text-subtle);
+}
+
+body.page.viewcontent .wiki-content a,
+#content .wiki-content a {
+  color: var(--kc-link-default);
+  font-weight: var(--kc-weight-regular);
+  text-decoration: none;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+body.page.viewcontent .wiki-content a:hover,
+#content .wiki-content a:hover {
+  color: var(--kc-link-hover);
+  text-decoration: underline;
+}
+
+body.page.viewcontent .wiki-content a:visited,
+#content .wiki-content a:visited {
+  color: var(--kc-link-visited);
+}
+
+
+/* =====================================================================
+   06. INTRO / LEAD PARAGRAPH
+   제목 직후 요약문, blockquote 문단
+   ===================================================================== */
+body.page.viewcontent .wiki-content > blockquote,
+#content .wiki-content > blockquote,
+body.page.viewcontent .wiki-content h1 + p em,
+#content .wiki-content h1 + p em {
+  display: block;
+  margin: 4px 0 var(--kc-content-gap-xl);
+  padding: 0 0 0 16px;
+  border: 0;
+  border-left: 2px solid #d8d8d8;
+  border-radius: 0;
+  background: transparent;
+  color: var(--kc-text-subtle);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-md);
+  font-style: normal;
+  font-weight: var(--kc-weight-regular);
+  line-height: 1.75;
+}
+
+body.page.viewcontent .wiki-content > blockquote p,
+#content .wiki-content > blockquote p {
+  margin: 0;
+  color: inherit;
+}
+
+
+/* =====================================================================
+   07. LIST SYSTEM
+   ===================================================================== */
+body.page.viewcontent .wiki-content ul,
+body.page.viewcontent .wiki-content ol,
+#content .wiki-content ul,
+#content .wiki-content ol {
+  margin-top: 8px;
+  margin-bottom: 20px;
+  padding-left: 24px;
+  color: var(--kc-text-default);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-md);
+  font-weight: var(--kc-weight-regular);
+  line-height: var(--kc-line-body);
+}
+
+body.page.viewcontent .wiki-content ul > li,
+#content .wiki-content ul > li {
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+body.page.viewcontent .wiki-content ol > li,
+#content .wiki-content ol > li {
+  margin-bottom: 8px;
+  padding-left: 2px;
+}
+
+body.page.viewcontent .wiki-content ol > li::marker,
+#content .wiki-content ol > li::marker {
+  color: var(--kc-text-strong);
+  font-weight: var(--kc-weight-semibold);
+}
+
+body.page.viewcontent .wiki-content ul > li::marker,
+#content .wiki-content ul > li::marker {
+  color: var(--kc-text-subtle);
+}
+
+body.page.viewcontent .wiki-content li > ul,
+body.page.viewcontent .wiki-content li > ol,
+#content .wiki-content li > ul,
+#content .wiki-content li > ol {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: var(--kc-text-default);
+}
+
+body.page.viewcontent .wiki-content input[type="checkbox"],
+#content .wiki-content input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin: 0 5px 0 0;
+  accent-color: var(--kc-blue-700);
+  vertical-align: -2px;
+}
+
+
+/* =====================================================================
+   08. HORIZONTAL RULE
+   ===================================================================== */
+body.page.viewcontent .wiki-content hr,
+#content .wiki-content hr {
+  height: 1px;
+  margin: var(--kc-content-gap-2xl) 0;
+  border: 0;
+  background: var(--kc-border-default);
+}
+
+
+/* =====================================================================
+   09. TABLE SYSTEM
+   ===================================================================== */
+.wiki-content .table-wrap,
+#content .wiki-content .table-wrap {
+  max-width: 100%;
+  margin: 20px 0 28px;
+  overflow-x: auto;
+  border-radius: var(--kc-radius-sm);
+}
+
+.wiki-content table.confluenceTable,
+.wiki-content table.confluenceTable.tablesorter,
+#content .wiki-content table.confluenceTable,
+#content .wiki-content table.confluenceTable.tablesorter {
+  width: 100% !important;
+  margin: 20px 0 28px !important;
+  overflow: hidden;
+  border: 1px solid var(--kc-border-default) !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  border-radius: var(--kc-radius-sm) !important;
+  background: var(--kc-surface-base) !important;
+  box-shadow: none !important;
+}
+
+/* Table header */
+.wiki-content table.confluenceTable th,
+.wiki-content table.confluenceTable th.confluenceTh,
+.wiki-content table.confluenceTable.tablesorter th.confluenceTh,
+#content .wiki-content table.confluenceTable th,
+#content .wiki-content table.confluenceTable th.confluenceTh,
+#content .wiki-content table.confluenceTable.tablesorter th.confluenceTh {
+  padding: 13px 16px !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid var(--kc-border-default) !important;
+  border-left: 1px solid var(--kc-border-default) !important;
+  background: #f7f8fa !important;
+  color: #303030 !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-sm) !important;
+  font-weight: var(--kc-weight-semibold) !important;
+  line-height: 1.5 !important;
+  text-align: left !important;
+  vertical-align: middle !important;
+}
+
+.wiki-content table.confluenceTable th:first-child,
+#content .wiki-content table.confluenceTable th:first-child {
+  border-left: 0 !important;
+}
+
+/* Sort button / header wrapper */
+.wiki-content table.confluenceTable th .tablesorter-header-inner,
+.wiki-content table.confluenceTable th .headerButton,
+.wiki-content table.confluenceTable th button,
+#content .wiki-content table.confluenceTable th .tablesorter-header-inner,
+#content .wiki-content table.confluenceTable th .headerButton,
+#content .wiki-content table.confluenceTable th button {
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: #303030 !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-sm) !important;
+  font-weight: var(--kc-weight-semibold) !important;
+  text-align: left !important;
+}
+
+/* Table body */
+.wiki-content table.confluenceTable td,
+.wiki-content table.confluenceTable td.confluenceTd,
+.wiki-content table.confluenceTable.tablesorter tbody tr td,
+#content .wiki-content table.confluenceTable td,
+#content .wiki-content table.confluenceTable td.confluenceTd,
+#content .wiki-content table.confluenceTable.tablesorter tbody tr td {
+  padding: 14px 16px !important;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 1px solid var(--kc-border-default) !important;
+  border-left: 1px solid var(--kc-border-default) !important;
+  background: var(--kc-surface-base) !important;
+  color: var(--kc-text-default) !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-sm) !important;
+  font-weight: var(--kc-weight-regular) !important;
+  line-height: 1.65 !important;
+  text-align: left !important;
+  vertical-align: top !important;
+  word-break: keep-all !important;
+}
+
+.wiki-content table.confluenceTable td:first-child,
+#content .wiki-content table.confluenceTable td:first-child {
+  border-left: 0 !important;
+}
+
+.wiki-content table.confluenceTable tr:last-child td,
+#content .wiki-content table.confluenceTable tr:last-child td {
+  border-bottom: 0 !important;
+}
+
+/* Zebra striping 제거 */
+.wiki-content table.confluenceTable tr,
+.wiki-content table.confluenceTable tr:nth-child(even) td,
+.wiki-content table.confluenceTable tr:nth-child(odd) td,
+.wiki-content table.confluenceTable.tablesorter tbody tr:nth-child(even) td,
+.wiki-content table.confluenceTable.tablesorter tbody tr:nth-child(odd) td,
+#content .wiki-content table.confluenceTable tr,
+#content .wiki-content table.confluenceTable tr:nth-child(even) td,
+#content .wiki-content table.confluenceTable tr:nth-child(odd) td {
+  background: var(--kc-surface-base) !important;
+}
+
+/* 짧은 식별자 열의 줄바꿈 방지 */
+.wiki-content table.confluenceTable th:first-child,
+.wiki-content table.confluenceTable td:first-child,
+#content .wiki-content table.confluenceTable th:first-child,
+#content .wiki-content table.confluenceTable td:first-child {
+  white-space: nowrap;
+}
+
+/* 표 내부 문단 여백 축소 */
+.wiki-content table.confluenceTable p,
+#content .wiki-content table.confluenceTable p {
+  margin: 0 0 8px !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+.wiki-content table.confluenceTable p:last-child,
+#content .wiki-content table.confluenceTable p:last-child {
+  margin-bottom: 0 !important;
+}
+
+
+/* =====================================================================
+   10. INLINE CODE
+   KakaoCloud reference:
+   - 14px
+   - font-weight 500
+   - border-radius 4px
+   - compact gray surface
+   ===================================================================== */
+body.page.viewcontent .wiki-content code,
+#content .wiki-content code {
+  display: inline;
+  padding: 2px 6px;
+  border: 1px solid #e4e6ea;
+  border-radius: var(--kc-radius-xs);
+  background: #f5f6f8;
+  color: #303030;
+  font-family: var(--kc-mono);
+  font-size: 0.875em;
+  font-weight: var(--kc-weight-medium);
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+
+/* =====================================================================
+   11. CODE BLOCKS
+   ===================================================================== */
+
+/* Confluence code macro outer wrapper */
+body.page.viewcontent .wiki-content div.code.panel,
+#content .wiki-content div.code.panel,
+body.page.viewcontent .wiki-content .codeContent,
+#content .wiki-content .codeContent {
+  max-width: 100%;
+  margin: 20px 0 24px;
+  overflow: hidden;
+  border: 1px solid var(--kc-border-code) !important;
+  border-radius: var(--kc-radius-sm) !important;
+  background: var(--kc-surface-code) !important;
+  box-shadow: none !important;
+}
+
+/* Confluence code macro header */
+body.page.viewcontent .wiki-content div.code.panel .codeHeader,
+#content .wiki-content div.code.panel .codeHeader {
+  min-height: 36px;
+  padding: 8px 14px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--kc-border-code) !important;
+  background: var(--kc-surface-code-header) !important;
+  color: var(--kc-text-subtle) !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-xs) !important;
+  font-weight: var(--kc-weight-medium) !important;
+  line-height: 20px !important;
+}
+
+/* 일반 pre 및 Code macro 내부 pre */
+body.page.viewcontent .wiki-content div.code.panel pre,
+#content .wiki-content div.code.panel pre,
+body.page.viewcontent .wiki-content .codeContent pre,
+#content .wiki-content .codeContent pre,
+body.page.viewcontent .wiki-content pre,
+#content .wiki-content pre {
+  max-width: 100%;
+  margin: 0 !important;
+  padding: 18px 20px !important;
+  overflow-x: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: var(--kc-surface-code) !important;
+  color: #393a34 !important;
+  box-sizing: border-box !important;
+  font-family: var(--kc-mono) !important;
+  font-size: 13px !important;
+  font-weight: var(--kc-weight-regular) !important;
+  line-height: var(--kc-line-code) !important;
+  tab-size: 2;
+  white-space: pre !important;
+}
+
+/* 일반 pre가 Code macro 밖에 있을 때만 외곽 카드 적용 */
+body.page.viewcontent .wiki-content > pre,
+#content .wiki-content > pre,
+body.page.viewcontent .wiki-content p + pre,
+#content .wiki-content p + pre {
+  margin: 20px 0 24px !important;
+  border: 1px solid var(--kc-border-code) !important;
+  border-radius: var(--kc-radius-sm) !important;
+}
+
+/* 코드 내부 code는 inline-code badge 효과 제거 */
+body.page.viewcontent .wiki-content pre code,
+#content .wiki-content pre code {
+  display: block;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: inherit !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: var(--kc-weight-regular) !important;
+  line-height: inherit !important;
+  white-space: inherit !important;
+}
+
+/* Syntax token: KakaoCloud reference Prism palette */
+body.page.viewcontent .wiki-content .token.comment,
+#content .wiki-content .token.comment {
+  color: #999988 !important;
+  font-style: italic;
+}
+
+body.page.viewcontent .wiki-content .token.keyword,
+body.page.viewcontent .wiki-content .token.builtin,
+body.page.viewcontent .wiki-content .token.constant,
+body.page.viewcontent .wiki-content .token.environment,
+#content .wiki-content .token.keyword,
+#content .wiki-content .token.builtin,
+#content .wiki-content .token.constant,
+#content .wiki-content .token.environment {
+  color: #8250df !important;
+}
+
+body.page.viewcontent .wiki-content .token.function,
+#content .wiki-content .token.function {
+  color: #d73a49 !important;
+  font-weight: var(--kc-weight-medium) !important;
+}
+
+body.page.viewcontent .wiki-content .token.variable,
+body.page.viewcontent .wiki-content .token.parameter,
+#content .wiki-content .token.variable,
+#content .wiki-content .token.parameter {
+  color: #36acaa !important;
+}
+
+body.page.viewcontent .wiki-content .token.string,
+#content .wiki-content .token.string {
+  color: #e3116c !important;
+}
+
+body.page.viewcontent .wiki-content .token.number,
+#content .wiki-content .token.number {
+  color: #36acaa !important;
+}
+
+body.page.viewcontent .wiki-content .token.operator,
+#content .wiki-content .token.operator {
+  color: #393a34 !important;
+}
+
+body.page.viewcontent .wiki-content .token.punctuation,
+#content .wiki-content .token.punctuation {
+  color: #393a34 !important;
+}
+
+body.page.viewcontent .wiki-content .token.property,
+body.page.viewcontent .wiki-content .token.key,
+body.page.viewcontent .wiki-content .token.attr-name,
+#content .wiki-content .token.property,
+#content .wiki-content .token.key,
+#content .wiki-content .token.attr-name {
+  color: #00a4db !important;
+}
+
+
+/* =====================================================================
+   12. IMAGE / IMAGE UPLOAD / ATTACHMENT — QC COMPLETED
+   Confluence 이미지는 아래 형태로 렌더링될 수 있음.
+   - img
+   - .confluence-embedded-image
+   - .confluence-embedded-file-wrapper
+   - .image-wrap
+   - a > img
+   - .attachment-image
+   - .confluence-thumbnail
+   ===================================================================== */
+
+/* 원본 이미지 자체 */
+body.page.viewcontent .wiki-content img,
+#content .wiki-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+  border: 1px solid var(--kc-border-default);
+  border-radius: var(--kc-radius-sm);
+  background: var(--kc-surface-base);
+  box-shadow: var(--kc-shadow-image);
+}
+
+/* 업로드된 Confluence 이미지 래퍼 */
+body.page.viewcontent .wiki-content .confluence-embedded-image,
+body.page.viewcontent .wiki-content .confluence-embedded-file-wrapper,
+body.page.viewcontent .wiki-content .image-wrap,
+body.page.viewcontent .wiki-content .attachment-image,
+body.page.viewcontent .wiki-content .confluence-thumbnail,
+#content .wiki-content .confluence-embedded-image,
+#content .wiki-content .confluence-embedded-file-wrapper,
+#content .wiki-content .image-wrap,
+#content .wiki-content .attachment-image,
+#content .wiki-content .confluence-thumbnail {
+  display: inline-block;
+  max-width: 100%;
+  margin: 8px 0 20px;
+  overflow: hidden;
+  border-radius: var(--kc-radius-sm);
+  vertical-align: top;
+}
+
+/* 링크로 감싼 이미지: hover 시에만 얕은 강조 */
+body.page.viewcontent .wiki-content a:has(img),
+#content .wiki-content a:has(img) {
+  display: inline-block;
+  max-width: 100%;
+  border-radius: var(--kc-radius-sm);
+  line-height: 0;
+  text-decoration: none;
+}
+
+body.page.viewcontent .wiki-content a:has(img):hover img,
+#content .wiki-content a:has(img):hover img {
+  border-color: #b8d7ff;
+  box-shadow: 0 4px 14px rgba(49, 130, 246, 0.16);
+}
+
+/* 이미지 매크로 내부 이미지: wrapper margin이 있으므로 중복 margin 제거 */
+body.page.viewcontent .wiki-content .confluence-embedded-image img,
+body.page.viewcontent .wiki-content .confluence-embedded-file-wrapper img,
+body.page.viewcontent .wiki-content .image-wrap img,
+body.page.viewcontent .wiki-content .attachment-image img,
+body.page.viewcontent .wiki-content .confluence-thumbnail img,
+#content .wiki-content .confluence-embedded-image img,
+#content .wiki-content .confluence-embedded-file-wrapper img,
+#content .wiki-content .image-wrap img,
+#content .wiki-content .attachment-image img,
+#content .wiki-content .confluence-thumbnail img {
+  margin: 0;
+}
+
+/* 이미지 캡션 / figure caption */
+body.page.viewcontent .wiki-content figcaption,
+body.page.viewcontent .wiki-content .image-caption,
+body.page.viewcontent .wiki-content .confluence-embedded-image + .caption,
+#content .wiki-content figcaption,
+#content .wiki-content .image-caption,
+#content .wiki-content .confluence-embedded-image + .caption {
+  max-width: 100%;
+  margin: -10px 0 20px;
+  color: var(--kc-text-subtle);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-xs);
+  font-weight: var(--kc-weight-regular);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* 첨부 파일 링크: 아이콘/파일명이 함께 나타나는 Confluence 구조 */
+body.page.viewcontent .wiki-content .attachment-link,
+body.page.viewcontent .wiki-content .confluence-embedded-file-wrapper a,
+#content .wiki-content .attachment-link,
+#content .wiki-content .confluence-embedded-file-wrapper a {
+  color: var(--kc-link-default);
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-sm);
+  font-weight: var(--kc-weight-medium);
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+body.page.viewcontent .wiki-content .attachment-link:hover,
+body.page.viewcontent .wiki-content .confluence-embedded-file-wrapper a:hover,
+#content .wiki-content .attachment-link:hover,
+#content .wiki-content .confluence-embedded-file-wrapper a:hover {
+  color: var(--kc-link-hover);
+  text-decoration: underline;
+}
+
+
+/* =====================================================================
+   13. CONFLUENCE INFORMATION MACROS
+   Information / Tip / Note / Warning
+   ===================================================================== */
+body.page.viewcontent .wiki-content .confluence-information-macro,
+#content .wiki-content .confluence-information-macro {
+  box-sizing: border-box;
+  margin: 20px 0 24px !important;
+  padding: 16px 18px !important;
+  border-radius: var(--kc-radius-sm) !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-sm) !important;
+  font-weight: var(--kc-weight-regular) !important;
+  line-height: var(--kc-line-body) !important;
+  box-shadow: none !important;
+}
+
+/* 매크로 내부 body */
+body.page.viewcontent .wiki-content .confluence-information-macro-body,
+#content .wiki-content .confluence-information-macro-body {
+  padding: 0 !important;
+  color: inherit !important;
+}
+
+/* 매크로 내부 제목 */
+body.page.viewcontent .wiki-content .confluence-information-macro .title,
+body.page.viewcontent .wiki-content .confluence-information-macro .confluence-information-macro-icon + .title,
+#content .wiki-content .confluence-information-macro .title,
+#content .wiki-content .confluence-information-macro .confluence-information-macro-icon + .title {
+  color: inherit !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-sm) !important;
+  font-weight: var(--kc-weight-bold) !important;
+}
+
+/* 매크로 내부 문단 */
+body.page.viewcontent .wiki-content .confluence-information-macro p,
+#content .wiki-content .confluence-information-macro p {
+  margin: 4px 0 !important;
+  color: inherit !important;
+  font-family: var(--kc-font) !important;
+  font-size: var(--kc-font-sm) !important;
+  font-weight: var(--kc-weight-regular) !important;
+  line-height: var(--kc-line-body) !important;
+}
+
+body.page.viewcontent .wiki-content .confluence-information-macro p:first-child,
+#content .wiki-content .confluence-information-macro p:first-child {
+  margin-top: 0 !important;
+}
+
+body.page.viewcontent .wiki-content .confluence-information-macro p:last-child,
+#content .wiki-content .confluence-information-macro p:last-child {
+  margin-bottom: 0 !important;
+}
+
+body.page.viewcontent .wiki-content .confluence-information-macro strong,
+#content .wiki-content .confluence-information-macro strong {
+  color: inherit !important;
+  font-weight: var(--kc-weight-bold) !important;
+}
+
+/* Information */
+body.page.viewcontent .wiki-content .confluence-information-macro-information,
+#content .wiki-content .confluence-information-macro-information {
+  border: 1px solid var(--kc-info-border) !important;
+  border-left: 3px solid var(--kc-info-accent) !important;
+  background: var(--kc-info-bg) !important;
+  color: var(--kc-info-text) !important;
+}
+
+/* Tip */
+body.page.viewcontent .wiki-content .confluence-information-macro-tip,
+#content .wiki-content .confluence-information-macro-tip {
+  border: 1px solid var(--kc-success-border) !important;
+  border-left: 3px solid var(--kc-success-accent) !important;
+  background: var(--kc-success-bg) !important;
+  color: var(--kc-success-text) !important;
+}
+
+/* Note */
+body.page.viewcontent .wiki-content .confluence-information-macro-note,
+#content .wiki-content .confluence-information-macro-note {
+  border: 1px solid var(--kc-warning-border) !important;
+  border-left: 3px solid var(--kc-warning-accent) !important;
+  background: var(--kc-warning-bg) !important;
+  color: var(--kc-warning-text) !important;
+}
+
+/* Warning */
+body.page.viewcontent .wiki-content .confluence-information-macro-warning,
+#content .wiki-content .confluence-information-macro-warning {
+  border: 1px solid var(--kc-danger-border) !important;
+  border-left: 3px solid var(--kc-danger-accent) !important;
+  background: var(--kc-danger-bg) !important;
+  color: var(--kc-danger-text) !important;
+}
+
+
+/* =====================================================================
+   14. EXPAND / ACCORDION MACRO
+   ===================================================================== */
+body.page.viewcontent .wiki-content .expand-container,
+#content .wiki-content .expand-container {
+  margin: 16px 0 24px;
+  overflow: hidden;
+  border: 1px solid var(--kc-border-default);
+  border-radius: var(--kc-radius-sm);
+  background: var(--kc-surface-base);
+  box-shadow: none;
+}
+
+body.page.viewcontent .wiki-content .expand-control,
+#content .wiki-content .expand-control {
+  min-height: 48px;
+  padding: 13px 16px !important;
+  background: var(--kc-surface-subtle);
+  color: #303030;
+  font-family: var(--kc-font);
+  font-size: var(--kc-font-sm);
+  font-weight: var(--kc-weight-semibold);
+  line-height: 1.5;
+}
+
+body.page.viewcontent .wiki-content .expand-control:hover,
+#content .wiki-content .expand-control:hover {
+  background: #f5f6f8;
+}
+
+body.page.viewcontent .wiki-content .expand-content,
+#content .wiki-content .expand-content {
+  padding: 16px;
+  border-top: 1px solid var(--kc-border-default);
+  background: var(--kc-surface-base);
+}
+
+
+
+/* =====================================================================
+   16. MENTION / PAGE TREE / USER LINK
+   ===================================================================== */
+body.page.viewcontent .wiki-content .confluence-userlink,
+#content .wiki-content .confluence-userlink {
+  color: var(--kc-link-default);
+  font-weight: var(--kc-weight-medium);
+  background: transparent;
+}
+
+#content-tree a.pagetree-title,
+#content-tree-container a.pagetree-title {
+  color: var(--kc-text-default);
+  font-family: var(--kc-font);
+  font-size: 13px;
+  font-weight: var(--kc-weight-regular);
+}
+
+#content-tree a.pagetree-title:hover,
+#content-tree-container a.pagetree-title:hover {
+  color: var(--kc-link-default);
+}
+
+#content-tree .pagetree-current a.pagetree-title,
+#content-tree-container .pagetree-current a.pagetree-title {
+  color: var(--kc-blue-900);
+  font-weight: var(--kc-weight-semibold);
+}
+
+
+/* =====================================================================
+   17. RESPONSIVE
+   ===================================================================== */
+@media (max-width: 768px) {
+  #title-text {
+    font-size: 26px;
+  }
+
+  body.page.viewcontent .wiki-content h1,
+  #content .wiki-content h1 {
+    font-size: 28px;
+  }
+
+  body.page.viewcontent .wiki-content h2,
+  #content .wiki-content h2 {
+    margin-top: 48px;
+    font-size: 23px;
+  }
+
+  body.page.viewcontent .wiki-content h3,
+  #content .wiki-content h3 {
+    margin-top: 36px;
+    font-size: 19px;
+  }
+
+  body.page.viewcontent .wiki-content p,
+  body.page.viewcontent .wiki-content li,
+  #content .wiki-content p,
+  #content .wiki-content li {
+    font-size: 15px;
+  }
+
+  body.page.viewcontent .wiki-content pre,
+  #content .wiki-content pre {
+    padding: 16px !important;
+    font-size: 12px !important;
+  }
+
+  .wiki-content table.confluenceTable th,
+  .wiki-content table.confluenceTable td,
+  #content .wiki-content table.confluenceTable th,
+  #content .wiki-content table.confluenceTable td {
+    padding: 12px !important;
+  }
+
+  .kc-toc.toc-macro,
+  .kc-toc .toc-macro,
+  #content .kc-toc,
+  .contextual-sidebar .kc-toc,
+  #content .toc-macro,
+  .contextual-sidebar .toc-macro {
+    position: static;
+  }
+}
+
+
+/* =====================================================================
+   18. DARK MODE TOKENS
+   ===================================================================== */
+html[data-color-mode="dark"],
+body.aui-theme-dark {
+  --kc-text-strong: #f5f5f5;
+  --kc-text-heading: #f0f0f0;
+  --kc-text-default: #d1d5db;
+  --kc-text-subtle: #a3a3a3;
+  --kc-text-placeholder: #737373;
+
+  --kc-surface-base: #161d27;
+  --kc-surface-subtle: #1b2430;
+  --kc-surface-muted: #202938;
+  --kc-surface-code: #161d27;
+  --kc-surface-code-header: #202938;
+
+  --kc-border-subtle: #2d3745;
+  --kc-border-default: #3a4552;
+  --kc-border-strong: #4a5868;
+  --kc-border-code: #3a4552;
+
+  --kc-link-default: #7db5ff;
+  --kc-link-hover: #a5cbff;
+  --kc-link-visited: #7db5ff;
+}
+
+
+/* =====================================================================
+   19. DARK MODE — BASE / TEXT
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content,
+body.aui-theme-dark.page.viewcontent .wiki-content,
+html[data-color-mode="dark"] #content .wiki-content,
+body.aui-theme-dark #content .wiki-content {
+  color: var(--kc-text-default);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content p,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content li,
+body.aui-theme-dark.page.viewcontent .wiki-content p,
+body.aui-theme-dark.page.viewcontent .wiki-content li,
+html[data-color-mode="dark"] #content .wiki-content p,
+html[data-color-mode="dark"] #content .wiki-content li,
+body.aui-theme-dark #content .wiki-content p,
+body.aui-theme-dark #content .wiki-content li {
+  color: var(--kc-text-default);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h1,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h2,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h3,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h4,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h5,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h6,
+body.aui-theme-dark.page.viewcontent .wiki-content h1,
+body.aui-theme-dark.page.viewcontent .wiki-content h2,
+body.aui-theme-dark.page.viewcontent .wiki-content h3,
+body.aui-theme-dark.page.viewcontent .wiki-content h4,
+body.aui-theme-dark.page.viewcontent .wiki-content h5,
+body.aui-theme-dark.page.viewcontent .wiki-content h6,
+html[data-color-mode="dark"] #content .wiki-content h1,
+html[data-color-mode="dark"] #content .wiki-content h2,
+html[data-color-mode="dark"] #content .wiki-content h3,
+html[data-color-mode="dark"] #content .wiki-content h4,
+html[data-color-mode="dark"] #content .wiki-content h5,
+html[data-color-mode="dark"] #content .wiki-content h6,
+body.aui-theme-dark #content .wiki-content h1,
+body.aui-theme-dark #content .wiki-content h2,
+body.aui-theme-dark #content .wiki-content h3,
+body.aui-theme-dark #content .wiki-content h4,
+body.aui-theme-dark #content .wiki-content h5,
+body.aui-theme-dark #content .wiki-content h6 {
+  color: var(--kc-text-strong);
+}
+
+html[data-color-mode="dark"] #title-text,
+body.aui-theme-dark #title-text {
+  background: transparent;
+  color: var(--kc-text-strong);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content > blockquote,
+body.aui-theme-dark.page.viewcontent .wiki-content > blockquote,
+html[data-color-mode="dark"] #content .wiki-content > blockquote,
+body.aui-theme-dark #content .wiki-content > blockquote {
+  border-left-color: #525252;
+  color: var(--kc-text-subtle);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content a,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content a:visited,
+body.aui-theme-dark.page.viewcontent .wiki-content a,
+body.aui-theme-dark.page.viewcontent .wiki-content a:visited,
+html[data-color-mode="dark"] #content .wiki-content a,
+html[data-color-mode="dark"] #content .wiki-content a:visited,
+body.aui-theme-dark #content .wiki-content a,
+body.aui-theme-dark #content .wiki-content a:visited {
+  color: var(--kc-link-default);
+}
+
+
+/* =====================================================================
+   20. DARK MODE — INLINE CODE / CODE BLOCK
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content code,
+body.aui-theme-dark.page.viewcontent .wiki-content code,
+html[data-color-mode="dark"] #content .wiki-content code,
+body.aui-theme-dark #content .wiki-content code {
+  border-color: #3f4752;
+  background: #222b36;
+  color: #e5e7eb;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content div.code.panel,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .codeContent,
+body.aui-theme-dark.page.viewcontent .wiki-content div.code.panel,
+body.aui-theme-dark.page.viewcontent .wiki-content .codeContent,
+html[data-color-mode="dark"] #content .wiki-content div.code.panel,
+html[data-color-mode="dark"] #content .wiki-content .codeContent,
+body.aui-theme-dark #content .wiki-content div.code.panel,
+body.aui-theme-dark #content .wiki-content .codeContent {
+  border-color: var(--kc-border-code) !important;
+  background: var(--kc-surface-code) !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content pre,
+body.aui-theme-dark.page.viewcontent .wiki-content pre,
+html[data-color-mode="dark"] #content .wiki-content pre,
+body.aui-theme-dark #content .wiki-content pre {
+  background: var(--kc-surface-code) !important;
+  color: #d1d5db !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content div.code.panel .codeHeader,
+body.aui-theme-dark.page.viewcontent .wiki-content div.code.panel .codeHeader,
+html[data-color-mode="dark"] #content .wiki-content div.code.panel .codeHeader,
+body.aui-theme-dark #content .wiki-content div.code.panel .codeHeader {
+  border-bottom-color: var(--kc-border-code) !important;
+  background: var(--kc-surface-code-header) !important;
+  color: #9ca3af !important;
+}
+
+
+/* =====================================================================
+   21. DARK MODE — IMAGE / ATTACHMENT
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content img,
+body.aui-theme-dark.page.viewcontent .wiki-content img,
+html[data-color-mode="dark"] #content .wiki-content img,
+body.aui-theme-dark #content .wiki-content img {
+  border-color: var(--kc-border-default);
+  background: #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content a:has(img):hover img,
+body.aui-theme-dark.page.viewcontent .wiki-content a:has(img):hover img,
+html[data-color-mode="dark"] #content .wiki-content a:has(img):hover img,
+body.aui-theme-dark #content .wiki-content a:has(img):hover img {
+  border-color: #4f8fe8;
+  box-shadow: 0 4px 16px rgba(79, 143, 232, 0.2);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content figcaption,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .image-caption,
+body.aui-theme-dark.page.viewcontent .wiki-content figcaption,
+body.aui-theme-dark.page.viewcontent .wiki-content .image-caption,
+html[data-color-mode="dark"] #content .wiki-content figcaption,
+html[data-color-mode="dark"] #content .wiki-content .image-caption,
+body.aui-theme-dark #content .wiki-content figcaption,
+body.aui-theme-dark #content .wiki-content .image-caption {
+  color: var(--kc-text-subtle);
+}
+
+
+/* =====================================================================
+   22. DARK MODE — TABLE
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content table.confluenceTable,
+body.aui-theme-dark.page.viewcontent .wiki-content table.confluenceTable,
+html[data-color-mode="dark"] #content .wiki-content table.confluenceTable,
+body.aui-theme-dark #content .wiki-content table.confluenceTable {
+  border-color: var(--kc-border-default) !important;
+  background: var(--kc-surface-base) !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content table.confluenceTable th,
+body.aui-theme-dark.page.viewcontent .wiki-content table.confluenceTable th,
+html[data-color-mode="dark"] #content .wiki-content table.confluenceTable th,
+body.aui-theme-dark #content .wiki-content table.confluenceTable th {
+  border-color: var(--kc-border-default) !important;
+  background: var(--kc-surface-muted) !important;
+  color: #f3f4f6 !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content table.confluenceTable td,
+body.aui-theme-dark.page.viewcontent .wiki-content table.confluenceTable td,
+html[data-color-mode="dark"] #content .wiki-content table.confluenceTable td,
+body.aui-theme-dark #content .wiki-content table.confluenceTable td {
+  border-color: var(--kc-border-default) !important;
+  background: var(--kc-surface-base) !important;
+  color: var(--kc-text-default) !important;
+}
+
+html[data-color-mode="dark"] .wiki-content table.confluenceTable tr,
+html[data-color-mode="dark"] .wiki-content table.confluenceTable tr:nth-child(even) td,
+html[data-color-mode="dark"] .wiki-content table.confluenceTable tr:nth-child(odd) td,
+body.aui-theme-dark .wiki-content table.confluenceTable tr,
+body.aui-theme-dark .wiki-content table.confluenceTable tr:nth-child(even) td,
+body.aui-theme-dark .wiki-content table.confluenceTable tr:nth-child(odd) td {
+  background: var(--kc-surface-base) !important;
+}
+
+
+/* =====================================================================
+   23. DARK MODE — INFORMATION MACRO
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .confluence-information-macro-information,
+body.aui-theme-dark.page.viewcontent .wiki-content .confluence-information-macro-information,
+html[data-color-mode="dark"] #content .wiki-content .confluence-information-macro-information,
+body.aui-theme-dark #content .wiki-content .confluence-information-macro-information {
+  border-color: #256b91 !important;
+  border-left-color: #55c7f5 !important;
+  background: #0d2b3a !important;
+  color: #c1e9fb !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .confluence-information-macro-tip,
+body.aui-theme-dark.page.viewcontent .wiki-content .confluence-information-macro-tip,
+html[data-color-mode="dark"] #content .wiki-content .confluence-information-macro-tip,
+body.aui-theme-dark #content .wiki-content .confluence-information-macro-tip {
+  border-color: #287a47 !important;
+  border-left-color: #58d17d !important;
+  background: #102f1d !important;
+  color: #c4f4d2 !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .confluence-information-macro-note,
+body.aui-theme-dark.page.viewcontent .wiki-content .confluence-information-macro-note,
+html[data-color-mode="dark"] #content .wiki-content .confluence-information-macro-note,
+body.aui-theme-dark #content .wiki-content .confluence-information-macro-note {
+  border-color: #8f6814 !important;
+  border-left-color: #f6c344 !important;
+  background: #3a2d0c !important;
+  color: #ffebad !important;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .confluence-information-macro-warning,
+body.aui-theme-dark.page.viewcontent .wiki-content .confluence-information-macro-warning,
+html[data-color-mode="dark"] #content .wiki-content .confluence-information-macro-warning,
+body.aui-theme-dark #content .wiki-content .confluence-information-macro-warning {
+  border-color: #913b3b !important;
+  border-left-color: #ff7272 !important;
+  background: #3a1515 !important;
+  color: #ffcaca !important;
+}
+
+
+/* =====================================================================
+   24. DARK MODE — EXPAND / TOC / PAGE TREE
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .expand-container,
+body.aui-theme-dark.page.viewcontent .wiki-content .expand-container,
+html[data-color-mode="dark"] #content .wiki-content .expand-container,
+body.aui-theme-dark #content .wiki-content .expand-container {
+  border-color: var(--kc-border-default);
+  background: var(--kc-surface-base);
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .expand-control,
+body.aui-theme-dark.page.viewcontent .wiki-content .expand-control,
+html[data-color-mode="dark"] #content .wiki-content .expand-control,
+body.aui-theme-dark #content .wiki-content .expand-control {
+  background: var(--kc-surface-muted);
+  color: #f3f4f6;
+}
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content .expand-content,
+body.aui-theme-dark.page.viewcontent .wiki-content .expand-content,
+html[data-color-mode="dark"] #content .wiki-content .expand-content,
+body.aui-theme-dark #content .wiki-content .expand-content {
+  border-top-color: var(--kc-border-default);
+  background: var(--kc-surface-base);
+}
+
+html[data-color-mode="dark"] .kc-toc.toc-macro,
+html[data-color-mode="dark"] .kc-toc .toc-macro,
+html[data-color-mode="dark"] #content .toc-macro,
+body.aui-theme-dark .kc-toc.toc-macro,
+body.aui-theme-dark .kc-toc .toc-macro,
+body.aui-theme-dark #content .toc-macro {
+  border-left-color: var(--kc-border-default);
+}
+
+html[data-color-mode="dark"] .kc-toc.toc-macro a,
+html[data-color-mode="dark"] .kc-toc .toc-macro a,
+html[data-color-mode="dark"] #content .toc-macro a,
+body.aui-theme-dark .kc-toc.toc-macro a,
+body.aui-theme-dark .kc-toc .toc-macro a,
+body.aui-theme-dark #content .toc-macro a {
+  color: var(--kc-text-subtle);
+}
+
+html[data-color-mode="dark"] #content-tree a.pagetree-title,
+html[data-color-mode="dark"] #content-tree-container a.pagetree-title,
+body.aui-theme-dark #content-tree a.pagetree-title,
+body.aui-theme-dark #content-tree-container a.pagetree-title {
+  color: var(--kc-text-default);
+}
+
+/* =====================================================================
+   KakaoCloud Tutorial Refinement Patch v2
+   - 기존 CSS의 맨 마지막에 추가
+   - 이전에 추가한 mention/TOC 패치가 있다면 삭제하고 이 파일로 교체
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. Tutorial information hierarchy
+   카카오클라우드 튜토리얼의 핵심은 "짧은 개요 → 단계별 수행 → 검증" 흐름입니다.
+   h2는 시나리오 단위, h3는 Step 단위, h4는 실행 방법 단위로 명확히 구분합니다.
+   --------------------------------------------------------------------- */
+:root {
+  --kc-tutorial-accent: #3182f6;
+  --kc-tutorial-accent-soft: #eaf3ff;
+  --kc-toc-line: #e7e7e7;
+  --kc-toc-indent: 12px;
+}
+
+body.page.viewcontent .wiki-content h3,
+#content .wiki-content h3 {
+  position: relative;
+  margin-top: 44px;
+  padding-top: 4px;
+  color: var(--kc-text-heading);
+}
+
+/* ---------------------------------------------------------------------
+   2. Mention — @를 CSS에서 보장
+   Confluence가 사용자 표시명만 렌더링하는 경우에도 @사용자명으로 표시합니다.
+   --------------------------------------------------------------------- */
+body.page.viewcontent .wiki-content a.confluence-userlink,
+#content .wiki-content a.confluence-userlink,
+body.page.viewcontent .wiki-content .user-mention,
+#content .wiki-content .user-mention,
+body.page.viewcontent .wiki-content [data-mention-id],
+#content .wiki-content [data-mention-id] {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+  color: var(--kc-link-default) !important;
+  font-weight: var(--kc-weight-medium) !important;
+  white-space: nowrap;
+}
+
+body.page.viewcontent .wiki-content a.confluence-userlink::before,
+#content .wiki-content a.confluence-userlink::before,
+body.page.viewcontent .wiki-content .user-mention::before,
+#content .wiki-content .user-mention::before,
+body.page.viewcontent .wiki-content [data-mention-id]::before,
+#content .wiki-content [data-mention-id]::before {
+  content: "@";
+  color: currentColor;
+  font-family: var(--kc-font);
+  font-weight: var(--kc-weight-semibold);
+}
+
+/* =====================================================================
+   TOC REPLACEMENT — 실제 Wiki DOM 기준
+
+   적용 전:
+   1) 기존 CSS의 "15. TABLE OF CONTENTS" 전체를 삭제
+   2) 이전에 붙인 TOC patch도 삭제
+   3) 이 블록을 CSS 파일의 마지막에 붙여넣기
+
+   확인된 DOM hook:
+   - .toc-item-body[data-outline]
+   - .toc-outline
+   - .toc-link
+   ===================================================================== */
+
+:root {
+  --kc-toc-text: #626262;
+  --kc-toc-text-strong: #202020;
+  --kc-toc-text-active: #3182f6;
+  --kc-toc-rail: #dedede;
+  --kc-toc-branch: #e9e9e9;
+  --kc-toc-indent: 14px;
+}
+
+/* TOC의 root ul과 모든 하위 ul을 정확히 대상으로 지정 */
+#content ul:has(> li > .toc-item-body),
+#content ul:has(> li > .toc-item-body) ul,
+.wiki-content ul:has(> li > .toc-item-body),
+.wiki-content ul:has(> li > .toc-item-body) ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* TOC root: 카카오클라우드 문서처럼 얇은 좌측 rail만 사용 */
+#content > ul:has(> li > .toc-item-body),
+.wiki-content > ul:has(> li > .toc-item-body),
+#content .toc-macro > ul:has(> li > .toc-item-body),
+.wiki-content .toc-macro > ul:has(> li > .toc-item-body) {
+  padding: 2px 0 2px 16px;
+  border-left: 1px solid var(--kc-toc-rail);
+}
+
+#content ul:has(> li > .toc-item-body) li,
+.wiki-content ul:has(> li > .toc-item-body) li {
+  display: block;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* 생성 번호는 숨김: 제목 안의 "STEP 1." 또는 "1."와 중복되지 않게 함 */
+#content .toc-outline,
+.wiki-content .toc-outline {
+  display: none;
+}
+
+/* 한 항목 = 링크 하나. 기존 li 여백/폰트 규칙의 영향을 차단 */
+#content .toc-item-body,
+.wiki-content .toc-item-body {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* 최상위 링크: 시나리오·주요 Step */
+#content > ul:has(> li > .toc-item-body) > li > .toc-item-body > .toc-link,
+.wiki-content > ul:has(> li > .toc-item-body) > li > .toc-item-body > .toc-link,
+#content .toc-macro > ul:has(> li > .toc-item-body) > li > .toc-item-body > .toc-link,
+.wiki-content .toc-macro > ul:has(> li > .toc-item-body) > li > .toc-item-body > .toc-link {
+  display: block;
+  padding: 5px 0;
+  color: var(--kc-toc-text-strong) !important;
+  font-family: var(--kc-font);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.45;
+  text-decoration: none !important;
+  overflow-wrap: anywhere;
+}
+
+/* 하위 ul: 같은 줄이 아니라 독립적인 outline branch로 표현 */
+#content ul:has(> li > .toc-item-body) li > ul,
+.wiki-content ul:has(> li > .toc-item-body) li > ul {
+  display: block;
+  margin: 2px 0 5px 7px;
+  padding: 0 0 0 var(--kc-toc-indent);
+  border-left: 1px solid var(--kc-toc-branch);
+}
+
+/* 하위 링크: 세부 절차. 한 단계 작고 가볍게 표현 */
+#content ul:has(> li > .toc-item-body) li > ul > li > .toc-item-body > .toc-link,
+.wiki-content ul:has(> li > .toc-item-body) li > ul > li > .toc-item-body > .toc-link {
+  display: block;
+  padding: 3px 0;
+  color: var(--kc-toc-text) !important;
+  font-family: var(--kc-font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-decoration: none !important;
+  overflow-wrap: anywhere;
+}
+
+/* 3단계부터는 깊이를 좁게 유지: 모바일에서 계단식 공백 방지 */
+#content ul:has(> li > .toc-item-body) li > ul li > ul,
+.wiki-content ul:has(> li > .toc-item-body) li > ul li > ul {
+  margin-left: 5px;
+  padding-left: 10px;
+}
+
+/* hover / 현재 위치. Wiki가 aria-current를 넣는 경우도 함께 대응 */
+#content .toc-link:hover,
+.wiki-content .toc-link:hover,
+#content .toc-link[aria-current="true"],
+.wiki-content .toc-link[aria-current="true"],
+#content .toc-link[aria-current="location"],
+.wiki-content .toc-link[aria-current="location"] {
+  color: var(--kc-toc-text-active) !important;
+  font-weight: 600;
+  text-decoration: none !important;
+}
+
+/* 모바일에서는 TOC root rail만 조금 좁게 */
+@media (max-width: 768px) {
+  #content > ul:has(> li > .toc-item-body),
+  .wiki-content > ul:has(> li > .toc-item-body),
+  #content .toc-macro > ul:has(> li > .toc-item-body),
+  .wiki-content .toc-macro > ul:has(> li > .toc-item-body) {
+    padding-left: 12px;
+  }
+
+  #content ul:has(> li > .toc-item-body) li > ul,
+  .wiki-content ul:has(> li > .toc-item-body) li > ul {
+    margin-left: 5px;
+    padding-left: 10px;
+  }
+}
+
+/* Dark mode */
+html[data-color-mode="dark"],
+body.aui-theme-dark {
+  --kc-toc-text: #aab4c0;
+  --kc-toc-text-strong: #e5e7eb;
+  --kc-toc-text-active: #7db5ff;
+  --kc-toc-rail: #3a4552;
+  --kc-toc-branch: #303b48;
+}
