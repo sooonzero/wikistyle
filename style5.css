@@ -1,0 +1,326 @@
+/* =====================================================================
+   kakao wiki custom stylesheet — FINAL (카카오클라우드 공식문서 완벽 동기화)
+   ===================================================================== */
+
+:root {
+  --kc-font: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+  --kc-text-900: #18181b;
+  --kc-text-700: #27272a;
+  --kc-text-500: #71717a;
+  --kc-text-body: #3f3f46;
+  --kc-border: #e2e8f0;
+  --kc-border-soft: #eceef1;
+  --kc-accent: #3182f6;
+  --kc-accent-dark: #1b64da;
+  --kc-radius: 8px;
+  --kc-header-h: 56px;
+}
+
+/* =====================================================================
+   LAYOUT & TYPOGRAPHY
+   ===================================================================== */
+body.page.viewcontent .wiki-content,
+#content .wiki-content {
+  word-break: keep-all; 
+  letter-spacing: -0.01em; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =====================================================================
+   HEADER / TITLE FIX (스크립트 충돌 및 겹침 방지)
+   ===================================================================== */
+#breadcrumb-section {
+  display: block;
+  position: static;
+  background: transparent;
+}
+
+#title-text {
+  font-family: var(--kc-font);
+  font-weight: 800;
+  color: var(--kc-text-900);
+}
+
+.pagination-actions,
+#action-menu,
+#action-menu-link,
+[id*="Link"]:has(#editPageLink),
+#title-heading ~ * #editPageLink,
+body #editPageLink {
+  position: relative;
+  z-index: 500;
+}
+
+body.page.viewcontent .wiki-content h1,
+body.page.viewcontent .wiki-content h2,
+body.page.viewcontent .wiki-content h3,
+body.page.viewcontent .wiki-content h4,
+#content .wiki-content h1,
+#content .wiki-content h2,
+#content .wiki-content h3,
+#content .wiki-content h4 {
+  scroll-margin-top: calc(var(--kc-header-h) + 16px);
+}
+
+/* ---------- Lead paragraph ---------- */
+body.page.viewcontent .wiki-content > blockquote,
+#content .wiki-content > blockquote,
+body.page.viewcontent .wiki-content h1 + p em,
+#content .wiki-content h1 + p em {
+  margin: 4px 0 28px;
+  padding: 0 0 0 14px;
+  border-left: 3px solid var(--kc-border);
+  border-top: 0;
+  background: transparent;
+  color: var(--kc-text-500);
+  font-family: var(--kc-font);
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.7;
+}
+body.page.viewcontent .wiki-content > blockquote p,
+#content .wiki-content > blockquote p { margin: 0; color: inherit; }
+
+/* ---------- Headings ---------- */
+body.page.viewcontent .wiki-content h1, #content .wiki-content h1 {
+  font-family: var(--kc-font);
+  font-size: 30px;
+  font-weight: 800;
+  color: var(--kc-text-900);
+  line-height: 1.35;
+}
+body.page.viewcontent .wiki-content h2, #content .wiki-content h2 {
+  font-family: var(--kc-font);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--kc-text-900);
+  line-height: 1.4;
+  margin-top: 56px; 
+  margin-bottom: 24px;
+  padding-bottom: 0;
+  border-bottom: none; 
+}
+body.page.viewcontent .wiki-content h3, #content .wiki-content h3 {
+  font-family: var(--kc-font);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--kc-text-700);
+  line-height: 1.45;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+body.page.viewcontent .wiki-content h4, #content .wiki-content h4 {
+  font-family: var(--kc-font);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--kc-text-700);
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+
+/* ---------- Body text & Links ---------- */
+body.page.viewcontent .wiki-content p, #content .wiki-content p {
+  font-family: var(--kc-font);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--kc-text-body);
+}
+body.page.viewcontent .wiki-content strong, #content .wiki-content strong { color: var(--kc-text-900); font-weight: 700; }
+
+body.page.viewcontent .wiki-content a, #content .wiki-content a {
+  color: var(--kc-accent);
+  font-weight: 500;
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+body.page.viewcontent .wiki-content a:hover, #content .wiki-content a:hover {
+  color: var(--kc-accent-dark);
+  text-decoration: underline;
+}
+body.page.viewcontent .wiki-content a:visited, #content .wiki-content a:visited { color: var(--kc-accent); }
+
+/* ---------- Lists ---------- */
+body.page.viewcontent .wiki-content ul, body.page.viewcontent .wiki-content ol,
+#content .wiki-content ul, #content .wiki-content ol { color: var(--kc-text-body); line-height: 1.75; }
+body.page.viewcontent .wiki-content ol > li, #content .wiki-content ol > li { margin-bottom: 10px; }
+body.page.viewcontent .wiki-content ol > li::marker, #content .wiki-content ol > li::marker { color: var(--kc-text-700); font-weight: 700; }
+body.page.viewcontent .wiki-content ul > li, #content .wiki-content ul > li { margin-bottom: 6px; }
+body.page.viewcontent .wiki-content li ul, body.page.viewcontent .wiki-content li ol,
+#content .wiki-content li ul, #content .wiki-content li ol { color: var(--kc-text-500); margin-top: 4px; }
+body.page.viewcontent .wiki-content input[type="checkbox"], #content .wiki-content input[type="checkbox"] { accent-color: var(--kc-accent); }
+
+/* =====================================================================
+   TABLES (카카오클라우드 공식문서 스타일)
+   ===================================================================== */
+.wiki-content .table-wrap, #content .wiki-content .table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+/* 1. 표 전체 외곽 테두리 상자 */
+.wiki-content table.confluenceTable,
+.wiki-content table.confluenceTable.tablesorter {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 6px !important;
+    margin: 24px 0 !important;
+}
+
+/* 2. 표 헤더 (옅은 회색 배경 + 세로선 + 하단선) */
+.wiki-content table.confluenceTable th,
+.wiki-content table.confluenceTable th.confluenceTh,
+.wiki-content table.confluenceTable.tablesorter th.confluenceTh {
+    background-color: #f8fafc !important;
+    color: #18181b !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    padding: 12px 16px !important;
+    border: 1px solid #e2e8f0 !important;
+    text-align: left !important;
+}
+
+/* 3. 헤더 내부 버튼/div 좌측 정렬 */
+.wiki-content table.confluenceTable th .tablesorter-header-inner,
+.wiki-content table.confluenceTable th .headerButton,
+.wiki-content table.confluenceTable th button {
+    text-align: left !important;
+    color: #18181b !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 4. 본문 데이터 셀 (올 화이트 + 세로선 + 가로선) */
+.wiki-content table.confluenceTable td,
+.wiki-content table.confluenceTable td.confluenceTd,
+.wiki-content table.confluenceTable.tablesorter tbody tr td {
+    background-color: #ffffff !important;
+    color: #3f3f46 !important;
+    font-size: 14px !important;
+    padding: 14px 16px !important;
+    border: 1px solid #e2e8f0 !important;
+    text-align: left !important;
+    vertical-align: top !important;
+    line-height: 1.6 !important;
+    word-break: keep-all !important;
+}
+
+/* 5. 첫 번째 열(No) 줄바꿈 방지 */
+.wiki-content table.confluenceTable td:first-child,
+.wiki-content table.confluenceTable th:first-child {
+    white-space: nowrap !important;
+}
+
+/* 6. 지브라(얼룩무늬) 제거 */
+.wiki-content table.confluenceTable tr,
+.wiki-content table.confluenceTable tr:nth-child(even) td,
+.wiki-content table.confluenceTable tr:nth-child(odd) td,
+.wiki-content table.confluenceTable.tablesorter tbody tr:nth-child(even) td,
+.wiki-content table.confluenceTable.tablesorter tbody tr:nth-child(odd) td {
+    background-color: #ffffff !important;
+}
+
+/* =====================================================================
+   CODE BLOCKS & INLINE BADGE
+   ===================================================================== */
+/* 1. 멀티라인 코드 블록 전체 박스 */
+body.page.viewcontent .wiki-content code[class*="language-"],
+#content .wiki-content code[class*="language-"],
+body.page.viewcontent .wiki-content pre,
+#content .wiki-content pre {
+    display: block !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+    font-size: 13.5px !important;
+    line-height: 1.6 !important;
+    color: #27272a !important;
+    overflow-x: auto !important;
+    white-space: pre !important;
+}
+
+/* 2. 구문 강조 (Syntax Highlighting) */
+body.page.viewcontent .wiki-content .token.function, #content .wiki-content .token.function { color: #2563eb !important; font-weight: 600 !important;} 
+body.page.viewcontent .wiki-content .token.operator, #content .wiki-content .token.operator { color: #d97706 !important; } 
+body.page.viewcontent .wiki-content .token.string, #content .wiki-content .token.string { color: #059669 !important; } 
+body.page.viewcontent .wiki-content .token.punctuation, #content .wiki-content .token.punctuation { color: #52525b !important; } 
+body.page.viewcontent .wiki-content .token.comment, #content .wiki-content .token.comment { color: #94a3b8 !important; font-style: italic !important;}
+body.page.viewcontent .wiki-content .token.number, #content .wiki-content .token.number { color: #0f766e !important; }
+body.page.viewcontent .wiki-content .token.builtin, body.page.viewcontent .wiki-content .token.constant,
+body.page.viewcontent .wiki-content .token.keyword, body.page.viewcontent .wiki-content .token.environment,
+#content .wiki-content .token.builtin, #content .wiki-content .token.constant,
+#content .wiki-content .token.keyword, #content .wiki-content .token.environment { color: #7c3aed !important; }
+
+/* 3. 인라인 코드 배지 (m3az, m2a 미니 박스 스타일) */
+body.page.viewcontent .wiki-content code,
+#content .wiki-content code {
+    background-color: #f1f5f9 !important;
+    color: #18181b !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 4px !important;
+    padding: 2px 6px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+body.page.viewcontent .wiki-content pre code, #content .wiki-content pre code { 
+    background: transparent !important; 
+    color: inherit !important; 
+    padding: 0 !important; 
+    border: none !important; 
+    font-weight: 400 !important; 
+}
+body.page.viewcontent .wiki-content td code, #content .wiki-content td code { 
+    margin: 0 2px 2px 0; 
+    display: inline-block; 
+}
+
+/* ---------- Info / Note / Tip / Warning macros ---------- */
+body.page.viewcontent .wiki-content .confluence-information-macro-information, #content .wiki-content .confluence-information-macro-information { background: #eaf8fc; border: 0; border-left: 4px solid #48b7cf; border-radius: var(--kc-radius); color: #334155; }
+body.page.viewcontent .wiki-content .confluence-information-macro-tip, #content .wiki-content .confluence-information-macro-tip { background: #f0fdf4; border: 0; border-left: 4px solid #4cae72; border-radius: var(--kc-radius); color: #166534; }
+body.page.viewcontent .wiki-content .confluence-information-macro-note, #content .wiki-content .confluence-information-macro-note { background: #fff8e8; border: 0; border-left: 4px solid #e3a72f; border-radius: var(--kc-radius); color: #713f12; }
+body.page.viewcontent .wiki-content .confluence-information-macro-warning, #content .wiki-content .confluence-information-macro-warning { background: #fef2f2; border: 0; border-left: 4px solid #e85d5d; border-radius: var(--kc-radius); color: #991b1b; }
+body.page.viewcontent .wiki-content .confluence-information-macro-body, #content .wiki-content .confluence-information-macro-body { color: inherit; padding: 4px 2px; }
+
+/* ---------- TOC ---------- */
+.kc-toc.toc-macro, .kc-toc .toc-macro, #content .kc-toc, .contextual-sidebar .kc-toc, #content .toc-macro, .contextual-sidebar .toc-macro { border: 0; border-left: 1px solid var(--kc-border-soft); background: transparent; position: sticky; top: calc(var(--kc-header-h) + 16px); }
+.kc-toc.toc-macro ul, .kc-toc .toc-macro ul, #content .kc-toc ul, .contextual-sidebar .kc-toc ul, #content .toc-macro ul, .contextual-sidebar .toc-macro ul { list-style: none; }
+.kc-toc.toc-macro a, .kc-toc .toc-macro a, #content .kc-toc a, .contextual-sidebar .kc-toc a, #content .toc-macro a, .contextual-sidebar .toc-macro a { color: var(--kc-text-500); background: transparent; font-family: var(--kc-font); font-size: 12.5px; font-weight: 400; line-height: 1.45; text-decoration: none; }
+.kc-toc.toc-macro a:hover, .kc-toc .toc-macro a:hover, #content .kc-toc a:hover, .contextual-sidebar .kc-toc a:hover, #content .toc-macro a:hover, .contextual-sidebar .toc-macro a:hover { color: var(--kc-accent); font-weight: 500; }
+
+/* ---------- Mentions & Left page tree ---------- */
+body.page.viewcontent .wiki-content .confluence-userlink, #content .wiki-content .confluence-userlink { color: var(--kc-accent); font-weight: 600; background: transparent; }
+#content-tree a.pagetree-title, #content-tree-container a.pagetree-title { font-family: var(--kc-font); font-size: 13px; color: var(--kc-text-body); }
+#content-tree a.pagetree-title:hover, #content-tree-container a.pagetree-title:hover { color: var(--kc-accent); }
+#content-tree .pagetree-current a.pagetree-title, #content-tree-container .pagetree-current a.pagetree-title { color: var(--kc-accent-dark); font-weight: 600; }
+
+/* =====================================================================
+   Dark mode overrides
+   ===================================================================== */
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content, body.aui-theme-dark.page.viewcontent .wiki-content { color: #cbd5e1; }
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h1, html[data-color-mode="dark"] body.page.viewcontent .wiki-content h2,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content h3, html[data-color-mode="dark"] body.page.viewcontent .wiki-content h4,
+body.aui-theme-dark.page.viewcontent .wiki-content h1, body.aui-theme-dark.page.viewcontent .wiki-content h2,
+body.aui-theme-dark.page.viewcontent .wiki-content h3, body.aui-theme-dark.page.viewcontent .wiki-content h4 { color: #f1f5f9; border-color: #334155; }
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content a, body.aui-theme-dark.page.viewcontent .wiki-content a,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content a:visited, body.aui-theme-dark.page.viewcontent .wiki-content a:visited { color: #67aaf9; }
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content div.code.panel[data-macro-name="code"],
+body.aui-theme-dark.page.viewcontent .wiki-content div.code.panel[data-macro-name="code"] { background: #0f172a; border-color: #334155 !important; }
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content code, body.aui-theme-dark.page.viewcontent .wiki-content code { background: #1e293b !important; color: #cbd5e1 !important; border-color: #334155 !important; }
+
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content table, body.aui-theme-dark.page.viewcontent .wiki-content table { border-color: #334155 !important; background: #0f172a !important; }
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content th, body.aui-theme-dark.page.viewcontent .wiki-content th,
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content th.confluenceTh, body.aui-theme-dark.page.viewcontent .wiki-content th.confluenceTh { background: #1e293b !important; border-color: #334155 !important; color: #f1f5f9 !important; }
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content th button.headerButton, body.aui-theme-dark.page.viewcontent .wiki-content th button.headerButton { color: #f1f5f9 !important; }
+html[data-color-mode="dark"] body.page.viewcontent .wiki-content td, body.aui-theme-dark.page.viewcontent .wiki-content td { background: #0f172a !important; color: #cbd5e1 !important; border-color: #334155 !important; }
+
+html[data-color-mode="dark"] #title-text, body.aui-theme-dark #title-text { background: transparent; color: #f1f5f9; }
